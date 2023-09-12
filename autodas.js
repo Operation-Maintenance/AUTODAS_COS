@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OplusM AUTODAS COS
 // @namespace    https://oplusm.fr/
-// @version      3.2
+// @version      1.0
 // @description  Envoie semi-automatique de prevenance ClickOnSIte
 // @author       Adi Lasri
 // @match        https://cos.ontower.fr/ontower-fr/#/ngs/entity/demande_d_acces_au_site/*
