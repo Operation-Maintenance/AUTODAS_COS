@@ -1,98 +1,114 @@
 // ==UserScript==
-// @name         OplusM AUTODAS AGORA
+// @name         OplusM AUTODAS COS
 // @namespace    https://oplusm.fr/
 // @version      3.2
-// @description  Envoie semi-automatique de prevenance Agora
+// @description  Envoie semi-automatique de prevenance ClickOnSIte
 // @author       Adi Lasri
-// @match        https://agora2.cellnextelecom.com/*
+// @match        https://cos.ontower.fr/ontower-fr/#/ngs/entity/demande_d_acces_au_site/*
 // @grant        none
-// @updateURL    https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS/main/autodas.js
-// @downloadURL  https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS/main/autodas.js
+// @updateURL    https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js
+// @downloadURL  https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js
 // ==/UserScript===
 
 (function () {
   //'use strict';
+      // Créer le bouton
+        var myButton = document.createElement('div');
+        myButton.id = 'myButton';
+        myButton.textContent = 'Envoyez un mail';
+        myButton.style.font.size = "14px";
+        myButton.style.position = 'fixed';
+        myButton.style.bottom = '20px';
+        myButton.style.right= '20px';
+        myButton.style.padding = '20px 40px';
+        myButton.style.backgroundColor = '#0066CC';
+        myButton.style.color = 'white';
+        myButton.style.borderRadius = '50px';
+        myButton.style.border = '2px solid #0066cc';
+        myButton.style.color = '#fff%';
+        myButton.style.boxshadow = 'none';
+        myButton.style.fontfamily = 'Roboto, sans-serif';
+        myButton.style.cursor = 'pointer';
 
-  window.addEventListener('load', function () {
-    setTimeout(function () { // récuparation des data nécéssaire
-      //const idSociete = document.getElementById('application-AccessManagement-Display-component---accessManagementPhase--accessmanagement_01_01_02-defaultXML--maintainer2-inner').value;
-      //const idLieux = document.getElementById('application-AccessManagement-Display-component---accessManagementPhase--accessmanagement_01_01_02-defaultXML--interventionPlace-inner').value;
-      const idIFSpec = document.getElementById('application-AccessManagement-Display-component---accessManagementPhase--accessmanagement_01_01_03-defaultXML--needEquipement-labelText').textContent;
-      const idSpec = document.getElementById('application-AccessManagement-Display-component---accessManagementPhase--accessmanagement_01_01_03-defaultXML--specialEquipment-labelText').textContent;
-      //const idInter = document.getElementById('application-AccessManagement-Display-component---accessManagementPhase--accessmanagement_01_01_02-defaultXML--interventionType-inner').value;
-      //const idDatedebut = document.getElementById('application-AccessManagement-Display-component---accessManagementPhase--accessmanagement_01_01_01-defaultXML--beginDate-inner').value;
-      //const idDatefin = document.getElementById('application-AccessManagement-Display-component---accessManagementPhase--accessmanagement_01_01_01-defaultXML--endDate-inner').value;
-     // const idDesc = document.getElementById('application-AccessManagement-Display-component---accessManagementPhase--accessmanagement_01_01_04-defaultXML--SARDescription-inner').value;
-      var balisesBdi = document.getElementsByTagName("bdi");
-      // Vérifiez s'il y a au moins deux balises <bdi> sur la page
-      if (balisesBdi.length >= 2) {
-        // Récupérez le texte contenu dans le deuxième élément <bdi>
-        var idDas = balisesBdi[0].textContent;
-        var idAdresse = balisesBdi[1].textContent;
-      } else {
-        console.log("Pas assez de balises bdi sur la page");
-      }
-      var baliseinput = document.getElementsByTagName("input");
-      if(baliseinput){
+        // Ajouter le bouton à la page
+        document.body.appendChild(myButton);
 
-        var idSociete = baliseinput[11].value;
-        var idTbouygues = baliseinput[0].value;
-        var idTbouygues = idTbouygues.slice(-6);
-        var idLieux = baliseinput[12].value;
-        var idDatedebut = baliseinput[3].value;
-        var idDatefin = baliseinput[4].value;
-        var idInter = baliseinput[6].value;
+      // Ajouter un gestionnaire de clic au bouton
+      myButton.addEventListener('click' ,function() {
 
-        console.log(baliseinput);
-      }
-      var balisespan = document.getElementsByTagName("span");
-      //if (balisespan){
-        //var idIFSpec = balisespan[199].textContent;
-        //var idSpec = balisespan[205].textContent;
-
-        //console.log(balisespan)
-      //}
-      var balisetextarea = document.getElementsByTagName("textarea");
-      if (balisetextarea){
-        console.log(balisetextarea);
-        var idDesc = balisetextarea[1].value;
-      }
-      var tables = document.querySelectorAll("table");
-      // Vérification s'il y a au moins quatre tableaux
-      if (tables.length >= 4) {
-        // Sélection du quatrième tableau
-        var table = tables[3];
-        // Sélection de toutes les lignes du tableau
-        var rows = table.querySelectorAll("tbody tr");
-        // Initialisation du tableau pour stocker les noms et prénoms
-        var contact = [];
-        // Parcourir chaque ligne et stocker les noms et prénoms
-        rows.forEach(function (row) {
-          // Sélection de la cellule contenant le nom et prénom
-          var nameCell2 = row.querySelector("td:nth-child(1)");
-          var nameCell = row.querySelector("td:nth-child(2)");
-          var nameCell3 = row.querySelector("td:nth-child(3)");
-          var nameCell4 = row.querySelector("td:nth-child(4)");
-          // Vérification si la cellule existe
-          if (nameCell) {
-            // Récupération du contenu de la cellule
-            var name = nameCell.querySelector("input").value;
-            var name2 = nameCell2.querySelector("input").value;
-            var name3 = nameCell3.querySelector("input").value;
-            var name4 = nameCell4.querySelector("input").value;
-            var name = name2 + " | " + name +" | "+name3 + " | "+ name4;
-            contact.push(name); // Ajout du nom et prénom au tableau
+        var BaliseP = document.getElementsByTagName("p");
+        if(BaliseP){
+          var idDas = BaliseP[3].innerText;
+          var idInter = BaliseP[10].innerText;
+          var idInterCat = BaliseP[11].innerText;
+          idInter += ' '+idInterCat;
+          var idSociete =  BaliseP[15].innerText;
+          var idLieux = BaliseP[12].innerText;
+          var idSpec = BaliseP[20].innerText;
+          var idDesc = BaliseP[22].innerText;
+          var idDatedebut = BaliseP[16].innerText;
+          var idDatedebuth = BaliseP[18].innerText;
+          var idDatefin = BaliseP[17].innerText;
+          var idDatefinh = BaliseP[19].innerText;
+          var DATE ="le "+ idDatedebut +" à " + idDatedebuth + "jusqu\'au " + idDatefin +" à "+ idDatefinh;
+          if (idDatedebut == idDatefin){
+            DATE= "le "+ idDatedebut+ " de " + idDatedebuth + " à " + idDatefinh;
           }
-        });
-      };
-      // Récupération de l'adresse et du code site
-      var idElement = idAdresse.slice(0, 13);
-      idAdresse = idAdresse.substring(15);
-      // Prompt des informations récupéré dans la console
-      console.log("Code site: " + idElement +" Code BYTEL: "+ idTbouygues + " Code das : " + idDas + " Société : " + idSociete + " Zone d'inter :" + idLieux + " Equipements spéciaux : " + idIFSpec + " / " + idSpec + " Nature inter :" + idInter + " Description inter : " + idDesc + " Contact : " + contact + " Adresse : " + idAdresse);
-      console.log("Date debut : " + idDatedebut + " Date fin : " + idDatefin);
-      // Appelez la fonction pour la première fois
-      // ouverture de la fenêtre pour la region
+          console.log(BaliseP);
+        }
+        var BaliseSpan= document.getElementsByTagName("span");
+        if(BaliseSpan){
+          var idElement = BaliseSpan[19].innerText;
+          idElement=idElement.slice(2);
+          var idAdresse= BaliseSpan[65].innerText;
+          console.log(BaliseSpan);
+        }
+                 // Sélectionnez tous les éléments de tableau (balise <table>) sur la page
+          var tables = document.getElementsByTagName('table');
+
+          // Vérifiez s'il y a au moins trois tableaux sur la page
+          if (tables.length >= 3) {
+              // Sélectionnez le troisième tableau (index 2 car les indices commencent à 0)
+              var table = tables[2];
+
+              // Sélectionnez toutes les lignes de données (ignorez la première ligne d'en-tête)
+              var rows = table.querySelectorAll('tbody tr:not(:first-child)');
+
+              // Créez un tableau pour stocker les données de toutes les lignes
+              var contact = [];
+
+              // Parcourez chaque ligne de données
+              rows.forEach(function(row) {
+                  // Sélectionnez toutes les cellules de données dans la ligne
+                  var cells = row.querySelectorAll('td');
+
+                  // Créez un tableau pour stocker les données de cette ligne
+                  var rowData = [];
+
+                  // Récupérez les données de chaque cellule et ajoutez-les à rowData
+                  rowData.push(cells[0].textContent.trim()); // Nom
+                  rowData.push(cells[1].textContent.trim()); // Prenom
+                  rowData.push(cells[2].textContent.trim()); // Telephone
+                  rowData.push(cells[3].textContent.trim()); // Email
+                  rowData.push(cells[4].textContent.trim()); // Fonction
+                  rowData.push(cells[5].textContent.trim()); // Entreprise
+
+                  // Ajoutez rowData au tableau rowDataArray
+                  contact.push(rowData);
+              });
+
+              // À ce stade, toutes les données de chaque ligne sont stockées dans rowDataArray
+              // Vous pouvez utiliser rowDataArray pour créer votre e-mail
+          } else {
+              console.error('La table n\'a pas été trouvée.');
+          }
+
+
+   // Prompt des informations récupéré dans la console
+            console.log("Code site: " + idElement +" Code das : " + idDas + " Société : " + idSociete + " Zone d'inter :" + idLieux + " Equipements spéciaux : " + idSpec + " Nature inter :" + idInter+ " Description inter : " + idDesc + " Contact : " + contact + " Adresse : " + idAdresse);
+            console.log(DATE);
+            // Appelez la fonction pour la première fois
+            // ouverture de la fenêtre pour la region
       var choix2;
         do {
             choix2 = prompt("Sélectionnez une Zone : \n1. NORD\n2. IDF\n3. SUD");
@@ -105,22 +121,22 @@
 
         // Vérifie si l'utilisateur a fait un choix valide
         if (choix2 !== null) {
-            sendEmail(idElement, idDas, idSociete, idAdresse, idLieux, idInter, idSpec, idDesc, contact, idIFSpec, idDatedebut, idDatefin, choix2,idTbouygues);
+            sendEmail(idElement, idDas, idSociete, idAdresse, idLieux, idInter, idSpec, idDesc, contact, DATE, choix2);
         }
-    }, 15000);
-   });
+      });
+
 
 
 
 
   // fonction de création du mail
-  function sendEmail(idElement, idDas, idSociete, idAdresse, idLieux, idInter, idSpec, idDesc, contact, idIFSpec, idDatedebut, idDatefin, choix2, idTbouyges) {
+  function sendEmail(idElement, idDas, idSociete, idAdresse, idLieux, idInter, idSpec, idDesc, contact, idIFSpec,DATE, choix2) {
     var recipient = ''; // pas de destinataire automatique
-    var subject = "CELLNEX "+choix2 + ' Intervention sur les antennes Bouygues Telecom,' + idElement + " // " + idDas; // sujet du mail
-    var body = 'Bonjour,%0A%0ANous sommes la société CELLNEX France mandatée par l\'antenniste Bouygues Telecom. %0A%0A';
-    body += 'Nous vous informons que la société ' + idSociete + ' souhaite intervenir sur votre site situé au ' + idAdresse + ' le ' + idDatedebut + ' jusqu\'au ' + idDatefin + '. %0A%0A'; //corps du mail
+    var subject = "CELLNEX "+choix2 + ' Intervention sur les antennes Free Mobile, ' + idElement + " // " + idDas; // sujet du mail
+    var body = 'Bonjour,%0A%0ANous sommes la société CELLNEX France mandatée par l\'antenniste Free Mobile. %0A%0A';
+    body += 'Nous vous informons que la société ' + idSociete + ' souhaite intervenir sur votre site situé à ' + idAdresse +" "+DATE + '. %0A%0A'; //corps du mail
     body += 'Ci-dessous les informations concernant l’opération :%0A%0A';
-    body += 'Référence du site : ' + idElement + ' // ' + idTbouyges + '.%0A';
+    body += 'Référence du site : ' + idElement +'.%0A';
     body += 'Lieu de l\'intervention : ' + idLieux + '.%0A';
     body += 'Nature d\'intervention : ' + idInter + '.%0A';
     body += 'Sur les équipements de l\’opérateur : Cellnex France.';
