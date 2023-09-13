@@ -1,17 +1,58 @@
 // ==UserScript==
 // @name         OplusM AUTODAS COS
 // @namespace    https://oplusm.fr/
-// @version      1.0
+// @version      1.1
 // @description  Envoie semi-automatique de prevenance ClickOnSIte
 // @author       Adi Lasri
-// @match        https://cos.ontower.fr/ontower-fr/#/ngs/entity/demande_d_acces_au_site/*
+// @match        https://cos.ontower.fr/ontower-fr/#/ngs/entity/task/*
 // @grant        none
-// @updateURL    https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js?token=GHSAT0AAAAAACGWLZRFQPN7QC345FIQH3QQZIAP6YA
-// @downloadURL  https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js?token=GHSAT0AAAAAACGWLZRFQPN7QC345FIQH3QQZIAP6YA
+// @updateURL    https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js?token=GHSAT0AAAAAACGWLZRFW76ZR5CXVJGESLQAZIBVLBQ
+// @downloadURL  https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js?token=GHSAT0AAAAAACGWLZRFW76ZR5CXVJGESLQAZIBVLBQ
 // ==/UserScript===
 
 (function () {
   //'use strict';
+     // fonction de création du mail
+  function sendEmail(idElement, idDas, idSociete, idAdresse, idLieux, idInter, idSpec, idDesc, contact,DATE) {
+          var choix2 = "cool";
+        do {
+            choix2 = prompt("Sélectionnez une Zone : \n1. NORD\n2. IDF\n3. SUD");
+          console.log(choix2);
+            // Vérifie si l'utilisateur a cliqué sur Annuler
+            if (choix2 === null) {
+                alert("Opération annulée.");
+                break; // Sort de la boucle si l'utilisateur a cliqué sur Annuler
+            }
+        } while (choix2 !== "NORD" && choix2 !== "IDF" && choix2 !== "SUD");
+    console.log(choix2);
+    var recipient = ''; // pas de destinataire automatique
+    var subject ="CELLNEX "+ choix2 + ' Intervention sur les antennes Free Mobile, ' + idElement; //+ " // " + idDas; // sujet du mail
+    var body = 'Bonjour,%0A%0ANous sommes la société CELLNEX France mandatée par l\'antenniste Free Mobile. %0A%0A';
+    body += 'Nous vous informons que la société ' + idSociete + ' souhaite intervenir sur votre site situé à ' + idAdresse +" "+DATE + '. %0A%0A'; //corps du mail
+    body += 'Ci-dessous les informations concernant l’opération :%0A%0A';
+    body += 'Référence du site : ' + idElement +'.%0A';
+    body += 'Lieu de l\'intervention : ' + idLieux + '.%0A';
+    body += 'Nature d\'intervention : ' + idInter + '.%0A';
+    body += 'Sur les équipements de l\’opérateur : Cellnex France.';
+    body += '%0AEquipements spéciaux : ' + idSpec;
+    body += '%0AMotif de l’intervention : ' + idDesc;
+    body += '%0ALes Intervenants sont : %0A';
+    for (var i = 0; i < contact.length; i++) {
+        body += contact[i] + "%0A";
+    }
+    body += '%0AAvons-nous votre accord pour l’intervention ? %0A';
+    body += 'Dans l’attente de votre retour.%0A';
+    body += 'Cordialement,%0A';
+
+
+    //var mailtoLink = 'mailto:' + recipient + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); // encapsulage dans le mailto
+    var urlOWA = "https://outlook.office365.com/owa/?path=/mail/action/compose&to=&subject="+encodeURIComponent(subject)+"&body="+body;
+    var senderEmail = "guichet.acces@cellnextelecom.fr"; // Remplacez par l'adresse e-mail de l'expéditeur que vous souhaitez utiliser
+    urlOWA += "&from=" + encodeURIComponent(senderEmail);
+
+    window.open(urlOWA, "_blank");
+    //window.location.href = mailtoLink;
+  };
       // Créer le bouton
         var myButton = document.createElement('div');
         myButton.id = 'myButton';
@@ -35,41 +76,44 @@
 
       // Ajouter un gestionnaire de clic au bouton
       myButton.addEventListener('click' ,function() {
-
+        var Tablenum= 1;
         var BaliseP = document.getElementsByTagName("p");
         if(BaliseP){
           var idDas = BaliseP[3].innerText;
-          var idInter = BaliseP[10].innerText;
-          var idInterCat = BaliseP[11].innerText;
+          var idInter = BaliseP[4].innerText;
+          var idInterCat = BaliseP[5].innerText;
           idInter += ' '+idInterCat;
-          var idSociete =  BaliseP[15].innerText;
-          var idLieux = BaliseP[12].innerText;
-          var idSpec = BaliseP[20].innerText;
-          var idDesc = BaliseP[22].innerText;
-          var idDatedebut = BaliseP[16].innerText;
-          var idDatedebuth = BaliseP[18].innerText;
-          var idDatefin = BaliseP[17].innerText;
-          var idDatefinh = BaliseP[19].innerText;
-          var DATE ="le "+ idDatedebut +" à " + idDatedebuth + "jusqu\'au " + idDatefin +" à "+ idDatefinh;
+          var idSociete =  BaliseP[16].innerText;
+          var idLieux = BaliseP[6].innerText;
+          var idSpec = BaliseP[13].innerText;
+          var idDesc = BaliseP[14].innerText;
+          var idDatedebut = BaliseP[7].innerText;
+          var idDatedebuth = BaliseP[9].innerText;
+          var idDatefin = BaliseP[8].innerText;
+          var idDatefinh = BaliseP[10].innerText;
+          var DATE ="le "+ idDatedebut +" à " + idDatedebuth + " jusqu\'au " + idDatefin +" à "+ idDatefinh;
           if (idDatedebut == idDatefin){
             DATE= "le "+ idDatedebut+ " de " + idDatedebuth + " à " + idDatefinh;
           }
           console.log(BaliseP);
         }
-        var BaliseSpan= document.getElementsByTagName("span");
+        var BaliseSpan= document.querySelectorAll('span.ng-binding.ng-scope');
         if(BaliseSpan){
-          var idElement = BaliseSpan[19].innerText;
+          var idElement = BaliseSpan[0].innerText;
+          var idAdresse = BaliseSpan[3].innerText;
+          if(idAdresse=="Bailleur sensible"){
+          Tablenum += 1;
+          idAdresse=BaliseSpan[16].innerText;}//3 et 16
           idElement=idElement.slice(2);
-          var idAdresse= BaliseSpan[65].innerText;
           console.log(BaliseSpan);
         }
                  // Sélectionnez tous les éléments de tableau (balise <table>) sur la page
           var tables = document.getElementsByTagName('table');
 
           // Vérifiez s'il y a au moins trois tableaux sur la page
-          if (tables.length >= 3) {
+          if (tables.length >= 2) {
               // Sélectionnez le troisième tableau (index 2 car les indices commencent à 0)
-              var table = tables[2];
+              var table = tables[Tablenum];
 
               // Sélectionnez toutes les lignes de données (ignorez la première ligne d'en-tête)
               var rows = table.querySelectorAll('tbody tr:not(:first-child)');
@@ -92,6 +136,10 @@
                   rowData.push(cells[3].textContent.trim()); // Email
                   rowData.push(cells[4].textContent.trim()); // Fonction
                   rowData.push(cells[5].textContent.trim()); // Entreprise
+                // Remplacez les virgules par des espaces dans chaque élément de rowData
+                  for (var i = 0; i < rowData.length; i++) {
+                      rowData[i] = rowData[i].replace(/,/g, ' '); // Remplacez toutes les virgules par des espaces
+                  }
 
                   // Ajoutez rowData au tableau rowDataArray
                   contact.push(rowData);
@@ -109,54 +157,7 @@
             console.log(DATE);
             // Appelez la fonction pour la première fois
             // ouverture de la fenêtre pour la region
-      var choix2;
-        do {
-            choix2 = prompt("Sélectionnez une Zone : \n1. NORD\n2. IDF\n3. SUD");
-            // Vérifie si l'utilisateur a cliqué sur Annuler
-            if (choix2 === null) {
-                alert("Opération annulée.");
-                break; // Sort de la boucle si l'utilisateur a cliqué sur Annuler
-            }
-        } while (choix2 !== "NORD" && choix2 !== "IDF" && choix2 !== "SUD");
+        sendEmail(idElement, idDas, idSociete, idAdresse, idLieux, idInter, idSpec, idDesc, contact, DATE);
 
-        // Vérifie si l'utilisateur a fait un choix valide
-        if (choix2 !== null) {
-            sendEmail(idElement, idDas, idSociete, idAdresse, idLieux, idInter, idSpec, idDesc, contact, DATE, choix2);
-        }
       });
-
-
-
-
-
-  // fonction de création du mail
-  function sendEmail(idElement, idDas, idSociete, idAdresse, idLieux, idInter, idSpec, idDesc, contact, idIFSpec,DATE, choix2) {
-    var recipient = ''; // pas de destinataire automatique
-    var subject = "CELLNEX "+choix2 + ' Intervention sur les antennes Free Mobile, ' + idElement + " // " + idDas; // sujet du mail
-    var body = 'Bonjour,%0A%0ANous sommes la société CELLNEX France mandatée par l\'antenniste Free Mobile. %0A%0A';
-    body += 'Nous vous informons que la société ' + idSociete + ' souhaite intervenir sur votre site situé à ' + idAdresse +" "+DATE + '. %0A%0A'; //corps du mail
-    body += 'Ci-dessous les informations concernant l’opération :%0A%0A';
-    body += 'Référence du site : ' + idElement +'.%0A';
-    body += 'Lieu de l\'intervention : ' + idLieux + '.%0A';
-    body += 'Nature d\'intervention : ' + idInter + '.%0A';
-    body += 'Sur les équipements de l\’opérateur : Cellnex France.';
-    body += '%0AEquipements spéciaux : ' + idIFSpec + " " + idSpec;
-    body += '%0AMotif de l’intervention : ' + idDesc;
-    body += '%0ALes Intervenants sont : %0A';
-    for (var i = 0; i < contact.length; i++) {
-        body += contact[i] + "%0A";
-    }
-    body += '%0AAvons-nous votre accord pour l’intervention ? %0A';
-    body += 'Dans l’attente de votre retour.%0A';
-    body += 'Cordialement,%0A';
-
-
-    //var mailtoLink = 'mailto:' + recipient + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body); // encapsulage dans le mailto
-    var urlOWA = "https://outlook.office365.com/owa/?path=/mail/action/compose&to=&subject="+subject+"&body="+body;
-    var senderEmail = "guichet.acces@cellnextelecom.fr"; // Remplacez par l'adresse e-mail de l'expéditeur que vous souhaitez utiliser
-    urlOWA += "&from=" + encodeURIComponent(senderEmail);
-
-    window.open(urlOWA, "_blank");
-    //window.location.href = mailtoLink;
-  };
 })();
