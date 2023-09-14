@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         OplusM AUTODAS COS
 // @namespace    https://oplusm.fr/
-// @version      1.1
+// @version      1.2
 // @description  Envoie semi-automatique de prevenance ClickOnSIte
 // @author       Adi Lasri
 // @match        https://cos.ontower.fr/ontower-fr/#/ngs/entity/task/*
 // @grant        none
-// @updateURL    https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js
-// @downloadURL  https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js
+// @updateURL    https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js?token=GHSAT0AAAAAACGWLZRFW76ZR5CXVJGESLQAZIBVLBQ
+// @downloadURL  https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js?token=GHSAT0AAAAAACGWLZRFW76ZR5CXVJGESLQAZIBVLBQ
+// ==/UserScript===
+
 (function () {
   //'use strict';
      // fonction de création du mail
@@ -22,9 +24,10 @@
                 break; // Sort de la boucle si l'utilisateur a cliqué sur Annuler
             }
         } while (choix2 !== "NORD" && choix2 !== "IDF" && choix2 !== "SUD");
+    if(choix2 == "NORD" || choix2 == "IDF" || choix2 == "SUD"){
     console.log(choix2);
     var recipient = ''; // pas de destinataire automatique
-    var subject ="CELLNEX "+ choix2 + ' Intervention sur les antennes Free Mobile, ' + idElement; //+ " // " + idDas; // sujet du mail
+    var subject ="CELLNEX "+ choix2 + ' Intervention sur les antennes Free Mobile, ' + idElement + " // " + idDas; // sujet du mail
     var body = 'Bonjour,%0A%0ANous sommes la société CELLNEX France mandatée par l\'antenniste Free Mobile. %0A%0A';
     body += 'Nous vous informons que la société ' + idSociete + ' souhaite intervenir sur votre site situé à ' + idAdresse +" "+DATE + '. %0A%0A'; //corps du mail
     body += 'Ci-dessous les informations concernant l’opération :%0A%0A';
@@ -49,6 +52,7 @@
     urlOWA += "&from=" + encodeURIComponent(senderEmail);
 
     window.open(urlOWA, "_blank");
+    }
     //window.location.href = mailtoLink;
   };
       // Créer le bouton
@@ -105,6 +109,11 @@
           idElement=idElement.slice(2);
           console.log(BaliseSpan);
         }
+        var BaliseA = document.querySelectorAll('a.pointer');
+        if(BaliseA){
+          idDas= BaliseA[8].textContent;
+          console.log(BaliseA);
+        }
                  // Sélectionnez tous les éléments de tableau (balise <table>) sur la page
           var tables = document.getElementsByTagName('table');
 
@@ -154,7 +163,6 @@
             console.log("Code site: " + idElement +" Code das : " + idDas + " Société : " + idSociete + " Zone d'inter :" + idLieux + " Equipements spéciaux : " + idSpec + " Nature inter :" + idInter+ " Description inter : " + idDesc + " Contact : " + contact + " Adresse : " + idAdresse);
             console.log(DATE);
             // Appelez la fonction pour la première fois
-            // ouverture de la fenêtre pour la region
         sendEmail(idElement, idDas, idSociete, idAdresse, idLieux, idInter, idSpec, idDesc, contact, DATE);
 
       });
