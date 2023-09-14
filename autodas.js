@@ -6,8 +6,8 @@
 // @author       Adi Lasri
 // @match        https://cos.ontower.fr/ontower-fr/#/ngs/entity/task/*
 // @grant        none
-// @updateURL    https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js?token=GHSAT0AAAAAACGWLZRFW76ZR5CXVJGESLQAZIBVLBQ
-// @downloadURL  https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js?token=GHSAT0AAAAAACGWLZRFW76ZR5CXVJGESLQAZIBVLBQ
+// @updateURL    https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js
+// @downloadURL  https://raw.githubusercontent.com/Operation-Maintenance/AUTODAS_COS/main/autodas.js
 // ==/UserScript===
 
 (function () {
